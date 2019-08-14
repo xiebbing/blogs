@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>6.3canvas jianbian</title>
+</head>
+<body>
+	<canvas id="myCanvas" width="640" height="480"></canvas>
+	<script type="text/javascript">
+		
+	var canvas = document.getElementById('myCanvas').getContext('2d');
+
+	function jianbian(){
+		var grd = canvas.createLinearGradient(0,200,200,0);//线性渐变的方法
+		grd.addColorStop(0,'#000');//添加渐变颜色
+		grd.addColorStop(.5,'#ccc');
+		grd.addColorStop(1,'#000');
+		canvas.fillStyle = grd;
+		canvas.strokeStyle='#09c';
+		canvas.lineWidth=2;
+		canvas.fillRect(0,0,200,200);
+		canvas.closePath();
+
+		let grd2 = canvas.createRadialGradient(300,250,2,200,200,250);
+		grd2.addColorStop(0,'#000');//
+		grd2.addColorStop(1,'#ccc');
+		canvas.fillStyle = grd2;
+		canvas.fillRect(200,200,200,200);
+		canvas.closePath();
+	}
+		
+function xian(){
+		canvas.moveTo(210,0);
+		canvas.lineTo(630,470);
+		canvas.stroke();
+
+}
+
+function shanjiao(){
+		canvas.beginPath();
+		canvas.moveTo(10,10);
+		canvas.lineTo(630,470);
+		canvas.lineTo(10,470);
+		canvas.lineTo(10,10);
+		canvas.closePath();
+
+		canvas.strokeStyle='#ab2121';
+		canvas.lineWidth=3;
+
+		canvas.fillStyle='#ccc';
+		canvas.fill();
+
+		canvas.stroke();
+}
+
+window.addEventListener('load',shanjiao,false)	
+
+		
+
+	</script>
+
+</body>
+</html>

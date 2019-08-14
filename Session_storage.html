@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Session storage pages to visit</title>
+	<script type="text/javascript">
+		function init(){
+			var divVisits = document.getElementById('divVisits');
+
+			if(window.sessionStorage){
+				var visits;
+				if(sessionStorage.visite){
+
+					visites = parseInt(sessionStorage.getItem('visites zoo'));
+					visites++;
+				}else{
+					visites = 1;
+				}
+				sessionStorage.setItem('dong',visites);
+
+				divVisits.innerHTML = 'Session page visite:'+ visites;
+			}else{
+				divVisites = 'window sessionStorage is not avalible';
+			}
+		}
+
+		window.addEventListener('load',init,false);
+	
+	</script>
+</head>
+
+<body>
+	<div id="divVisits"></div>
+
+</body>
+</html>

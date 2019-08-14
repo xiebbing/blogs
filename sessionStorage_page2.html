@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>sessionStorage for page2</title>
+	<meta charset="utf-8">
+</head>
+<style type="text/css">
+	#themeContext {
+		background-color: #fff;
+		border-style: solid;
+		border-width: 12px;
+	}
+
+	#themeSetting {
+		margin:10px;
+
+	}
+</style>
+<script type="text/javascript">
+	function init(){
+		var themeColor = sessionStorage.getItem('themeColor');
+		applyTheme(themeColor);
+	}
+
+	function applyTheme(themeColor){
+		document.body.style.backgroundColor = themeColor;
+		var themeContext = document.getElementById('themeContext');
+		var themeDiv = document.getElementById('theme');
+		themeContext.style.backgroundColor = themeColor
+		themeDiv.innerHTML = themeColor + 'theme';
+	}
+
+	window.addEventListener('load',init,false);
+</script>
+<body>
+	<div id="themeContext">
+		<div id="themeSetting">
+			<h1>page2</h1>
+			<div id="theme"></div>
+			<br><br>
+			<a href="./sessionStorage_page1.html">come to page1</a>
+		</div>
+
+	</div>
+</body>
+</html>

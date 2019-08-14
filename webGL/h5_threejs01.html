@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>three框架</title>
+	<script src="../js/three_93.js"></script>
+	<script src="../js/WebGL.js"></script>
+	<style type="text/css">
+		canvas {
+			width:100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body onload="start();">
+	<div id="containt"></div>
+	<canvas></canvas>
+	<script>
+		//定义场景
+		var scene = new THREE.Scene();
+		//定义相机
+		var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+		//渲染场景
+		var renderer = new THREE.WebGLRenderer();
+		//渲染大小尺寸
+		renderer.setSize(window.innerWidth,window.innerHeight);
+		//挂载渲染
+		document.body.appendChild(renderer.domElement);
+		//定义几何体
+		 var geometry = new THREE.CubeGeometry(1,1,1);
+		//CubeGeometry(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, materials, sides)
+		//定义网格基础材料
+		var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+		//定义三维物体
+		var cube = new THREE.Mesh(geometry, material);
+		//添加到场景
+		scene.add(cube);
+		//相机在z轴的位置
+		camera.position.z = 5;
+		//实时渲染
+		function render(){
+			requestAnimationFrame(render);
+			cube.rotation.x += 0.1;
+			cube.rotation.y += 0.1;
+			renderer.render(scene,camera);
+			
+			//requestAnimationFram()函数执行上一个render,render有执行requestAnimationFram,来循环
+
+		}
+		//用来检测浏览器是否支持webGl
+		function start(){
+			if(WEBGL.isWebGLAvailable()){
+				render();
+			}else{
+				var warning = WEBGL.getWebGLErrorMessage();
+				document.getElementById('containt').appendChild(warning)
+			}
+		}
+
+	</script>
+	
+</body>
+</html>

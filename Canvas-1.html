@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>6.2 canvas Grid System</title>
+</head>
+<style type="text/css">
+	canvas {
+		border:1px solid #03f;
+		background:#CFC;
+	}
+	
+</style>
+<script type="text/javascript">
+	function showGrid(){
+		const canvas = document.getElementById('myCanvas');
+		const context = canvas.getContext('2d');
+
+		context.lineWidth=1;//线宽
+		context.strokeStyle='#999';//线的颜色
+
+		const lineSpacing=100;//线的间距
+
+		var xPos=0;//x坐标点
+		var yPos=0;//y坐标点
+
+		const numHorizontalLines=parseInt(canvas.height/lineSpacing);//纵向线的数量
+		const numVerticalLines = parseInt(canvas.width/lineSpacing);//横向线的数量
+
+	//画出横向线(Horizontal)
+		for(var i=1;i<=numHorizontalLines;i++){
+			yPos = i * lineSpacing;
+			context.moveTo(0,yPos);
+			context.lineTo(canvas.width,yPos);
+			context.stroke()
+		}
+	//画出纵向线(vertical)
+		for(var j=1;j<=numVerticalLines;j++){
+			xPos=j*lineSpacing;
+			context.moveTo(xPos,0);
+			context.lineTo(xPos,canvas.height);
+			context.stroke();
+		}
+//将圆和坐标添加到网格交叉点
+	for(var y=0;y<numHorizontalLines;y++){
+		for(var x=0;x<numVerticalLines;x++){
+		//计算x和y的位置
+			xPos=x*lineSpacing;
+			yPos=y*lineSpacing;
+		//如果在(0,0)就改变颜色
+			if(x==0 && y==0){
+				context.fillStyle="#f00";
+			}else {
+				context.fillStyle="#000";
+			}
+		//在原点画圆圈
+			context.beginPath();
+		//在所有x和y上画一个半径为5的圆
+			context.arc(xPos,yPos,5,0,Math.PI*2,true);
+			context.fill();
+
+		//显示坐标的文本coordination(坐标)
+		//检查是否在最后一个垂直位置并在左侧放置文本
+			if(x==numVerticalLines){
+				context.textAlign='right';
+				xPos -= 5;
+			}else{
+				context.textAlign='left';
+				xPos += 5;
+			}
+
+			if(y==numHorizontalLines){
+				yPos -= 8;
+			}else{
+				yPos += 12;
+			}
+
+			context.fillText('('+x*lineSpacing+','+y*lineSpacing+')',xPos,yPos);
+		}
+  	}
+
+
+}
+
+window.addEventListener('load',showGrid,false)
+	
+
+</script>
+<body>
+	<canvas id="myCanvas" width="600" height="400">
+		the canvas html5 is not support!please run this page in a different brower.
+		
+	</canvas>
+
+
+</body>
+</html>

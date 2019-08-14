@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>use pushState in the pages</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function init(){
+			var btnNextHibit = document.getElementById('hibit');
+			btnNextHibit.addEventListener('click',nextHibit,false);
+		}
+
+		function nextHibit(){
+			//check to see  if the history pushState API is avalible
+			//检查历史记录pushState API是否可用
+			if(typeof history.pushState !== "undefined"){
+				//执行pushState方法
+				history.pushState('Meerkat','Meeerkat exhibit','history_api.html');
+				document.getElementById('hibit').innerHTML = "AT the Meeerkat";
+			}else {
+				//历史记录pushState API不可用
+				alert('the History API is not avalible in this browser');
+			}
+		}
+
+		window.addEventListener('load',init,false)
+		
+	</script>
+	welcome to zoo!
+	<div id="hibit" >
+		you are in the zoo entrance.
+	</div>
+	<button id="btnNextHibit">visit the website</button>
+</body>
+</html>

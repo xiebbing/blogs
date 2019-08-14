@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>01-位置音频</title>
+    <script src="../js/three.js" ></script>
+    <script src="../js/WebGL.js" ></script>
+</head>
+<script>
+    var renderer = null;
+    var camera = null;
+    var scene = null;
+    var mesh =null;
+
+    //初始化渲染器
+    function initThree(){
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+    }
+
+    // 照像机设置
+    function initCamera(){
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+    }
+
+    // 场景设置
+    function initScene(){
+         scene = new THREE.Scene();
+    }
+    // 灯光设置
+    function initLight(){
+        //这里暂时可以空着
+    }
+
+    // 几何体（物体）设置
+    function initObject(){
+        var geometry = new THREE.CubeGeometry(1,1,1);
+        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.x = 5;
+        scene.add(mesh);
+    }
+    // 开始渲染
+    function render(){
+        renderer.setClearColor("#ffffff")
+        requestAnimationFrame(render);
+        mesh.rotation.x += 0.1;
+        mesh.rotation.y += 0.1;
+        renderer.render(scene, camera);
+
+    }
+
+    function threeStart() {
+
+        initThree();     // 初始化渲染器
+        initCamera(); // 照像机设置
+        initScene();    // 场景设置
+        initLight();      // 灯光设置
+        initObject();    // 几何体（物体）设置
+        render();        // 开始渲染
+        playBackground();
+   }
+
+    function start(){
+        if (WEBGL.isWebGLAvailable()) {
+            // Initiate function or other initializations here
+            threeStart();
+        } else {
+            var warning = WEBGL.getWebGLErrorMessage();
+            document.getElementById('container').appendChild(warning);
+        }
+
+    }
+
+    function playBackground(){
+        // 创建一个虚拟的监听者
+        var listener = new THREE.AudioListener();
+        // 监听者绑定到相机对象
+        camera.add(listener);
+        // 创建一个位置音频对象,监听者作为参数,音频和监听者关联。
+        var PosAudio = new THREE.PositionalAudio(listener);
+        //音源绑定到一个网格模型上
+        mesh.add(PosAudio);
+        // 创建一个音频加载器
+        var audioLoader = new THREE.AudioLoader();
+        // 加载音频文件，返回一个音频缓冲区对象作为回调函数参数
+        audioLoader.load('./audio/幸福的早晨.mp3', function(AudioBuffer) {
+            // console.log(buffer);
+            // 音频缓冲区对象关联到音频对象audio
+            PosAudio.setBuffer(AudioBuffer);
+            PosAudio.setVolume(0.9); //音量
+            PosAudio.setRefDistance(200); //参数值越大,声音越大
+            PosAudio.play(); //播放
+        });
+    }
+
+
+</script>
+<body onload="start();">
+<div id="container"></div>
+</body>
+</html>

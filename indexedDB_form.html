@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>使用indexedDB for 表单</title>
+</head>
+<body>
+	<div id="container">
+		<form id="form">
+			<label>数据库名称：<input required type="text" name="DB" autocomplete="off"></label>
+			<label>开始时间：<input required type="date" name="begin" placeholder="YYYY-MM-DD"></label>
+			<label>预计结束：<input required type="date" name="end" placeholder="YYYY-MM-DD"	></label>
+			<label>参加人员：<input required name="person" placeholder="多人空格分隔"></label>
+		</form>
+
+		<div id="result" class="result">
+			<table class="Tab">
+				<thead>
+					<tr>
+						<th>数据库名称</th>
+                    	<th>开始时间</th>
+                   		<th>结束时间</th>
+                    	<th>参与人员</th>
+                    	<th width="30">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<script id="list" type="text/template">
+						<tr>
+    						<td class="Td" data-key="name" data-id="$id$" contenteditable="plaintext-only">$name$</td>
+
+    						<td data-key="begin" data-id="$id$" contenteditable="plaintext-only">$begin$</td>
+
+    						<td data-key="end" data-id="$id$" contenteditable="plaintext-only">$end$</td>
+
+    						<td data-key="person" data-id="$id$" contenteditable="plaintext-only">$person$</td>
+
+    						<td data-key="remark" data-id="$id$" contenteditable="plaintext-only">$remark$</td>
+
+    						<td><a href="javascript:" role="button" class="jsListDel" data-id="$id$">删除</a></td>
+						</tr>
+					</script>
+				</tbody>
+			</table>
+			<div id="state" class="status">加载中。。。</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		
+
+
+
+		//数据库的使用
+		let dbname='mydb';
+		let version = 1;
+		var db;
+
+		var DBOpenRequest = window.indexedDB.open(dbname,version);
+
+		//如果打开数据库失败
+		DBOpenRequest.onerror = function(event){
+			logError('数据库打开失败！')
+		};
+
+		DBOpenRequest.onsuccess = function(event){
+			db = DBOpenRequest.result;
+			//显示数据
+			methods.show();
+		};
+
+		//下面事情执行于：数据库首次创建版本，或者window.indexedDB.open传递的新版本（版本数值要比现在的高）升级版本
+		DBOpenRequest.onupgradeneeded = function(event){
+			var db = event.target.result;
+
+			db.onerror = function(event){
+				logError('数据库打开失败！');
+			};
+
+			//创建一个数据存储对象
+			var objectStore = db.createObjectStore(dbname,{
+				keyPath:'id',
+				autoIncrement:true
+			});
+
+			//定义存储对象的数据项
+			objectStore.createIndex('id','id',{
+				unique:true
+			});
+
+			objectStore.createIndex('name','name');
+			objectStore.createIndex('begin','begin');
+			objectStore.createIndex('end','end');
+			objectStore.createIndex('person','person');
+		};
+		//
+		var methods = {
+			add:function(newItem){
+				var transaction = db.transaction([dbname],"readwrite");
+				//打开已经存储的数据对象
+				var objectStore = transaction.objectStore(dbname);
+				//添加到数据对象中
+				var objectStoreRequest = objectStore.add(newItem);
+				objectStoreRequest.onsuccess = function(event){
+					methods.show();
+				};
+			},
+
+			edit:function(id,data){
+					//编辑数据
+					var transaction = db.transaction([dbname],'readwrite');
+					//打开已经存储的数据对象
+					var objectStore = transaction.objectStore(dbname);
+					//获取存储的对应键的存储对象
+					var objectStoreRequest = objectStore.get(id);
+					//获取成功后替换当前数据
+					objectStoreRequest.onsuccess = function(event){
+						// 当前数据
+						var myRecord = objectStoreRequest.result;
+						// 遍历替换
+						for(var key in data){
+							if(typeof myRecord[key] != 'undefined'){
+								myRecord[key] = data[key];
+							}
+						}
+
+						//更新数据库存储数据 
+						objectStore.put(myRecord);
+					};
+			},
+			
+		}
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>6.3canvas sqare</title>
+</head>
+<body>
+	<canvas id="myCanvas" width="640" height="480"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById('myCanvas').getContext('2d');
+		canvas.shadowOffsetX=10;
+		canvas.shadowOffsetY=10;
+		canvas.shadowBlur = 10;
+		canvas.shadowColor = 'rgba(200,0,200,.3)';
+		canvas.strokeStyle = '#09c';
+		canvas.lineWidth = 5;
+
+		canvas.fillStyle = 'rgba(200,0,200,1)';
+		canvas.fillRect(0,0,100,100);
+		canvas.clearRect(25,25,50,20);
+		canvas.strokeRect(25,25,50,50);
+
+
+	</script>
+
+</body>
+</html>

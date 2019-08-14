@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>websocket</title>
+	<script type="text/javascript">
+		
+
+		var wsUrl = 'ws://121.40.165.18:8800';
+
+		function init(){
+			var btnSend = document.getElementById('btnSend');
+			var btnClose = document.getElementById('btnClose');
+
+			btnSend.addEventListener('click',postMessage,false);
+			btnClose.addEventListener('click',closeWs,false);
+
+			updateStatus('initializing websocket connection');
+
+			//使用侦听器地址创建Web套接字实例
+			var ws = new WebSocket(wsUrl);
+
+			//为Web套接字事件设置我们的处理函数
+			ws.onopen = function(){onOpen()};
+			ws.onclose = function(){onClose()};
+			ws.onmessage = function(evt){onMessage(evt)};
+			ws.onerror = function(evt){onError(evt)};
+
+			//webSocker handle
+			//Web套接字连接已成功打开
+			function onOpen(msg){
+				postMessage(msg)
+				updateStatus('Connection open')
+			}
+
+			//web套接字接受消息
+			function onMessage(evt){
+				aler('Received Message:'+ evt.data);
+				updateStatus('message recived:'+ evt.data);
+				document.getElementById('message').innerHTML = evt.data;
+			}
+
+			//web套接字错误
+			function onError(evt){
+				aler('director connection error:'+ evt.data);
+				updateStatus('error:'+ evt.data);
+			}
+
+			//web socket closed
+			function onClose(){
+				aler('director connection closed.');
+				updateStatus('closed it')
+			}
+
+			//发送消息通过websocket
+			function postMessage(msg){
+				msg = document.getElementById('msg').value;
+
+				aler('send message:'+ msg);
+				updateStatus('sending message:'+ msg)
+
+				ws.send(msg);
+			}
+
+			function closeWs(){
+				aler('关闭连接ws')
+				updateStatus('连接正在关闭');
+
+				ws.close();
+			}
+
+			//帮助函数，用于更改Web套接字的状态
+			function updateStatus(msg){
+				document.getElementById('wsState').innerHTML = msg;
+
+			}
+
+
+			window.addEventListener('load',init,true);
+		}
+	</script>
+</head>
+<body>
+	<div id="btnTryCall">
+		<input type="text" id="msg">
+		<button id="btnSend">Send</button>
+		<button id="btnClose">Close webSocket</button>
+	</div>
+
+	<div id="wsState"></div>
+	<div id="messages"></div>
+
+</body>
+</html>

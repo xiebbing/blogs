@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>11.2 Theme Selector - page 1</title>
+</head>
+<style type="text/css">
+	#themeContent{
+		background-color:#fff;
+		border-style:solid;
+		border-width:2px;
+	}
+
+	#themeSettings {
+		margin:10px;
+	}
+
+
+	
+</style>
+<body>
+	<div id="themeContent">
+		<div id="theneSettings">
+			<h1>page 1</h1>
+			Choose Theme;
+			<select id="themeColor">
+				<option id="default" value="">Select Color...</option>
+				<option id="blue" value="blue">Blur</option>
+				<option id="red" value="red">Red</option>
+				<option id="yellow" value="yellow">Yellow</option>
+				<option id="green" value="green">Green</option>
+			</select>
+			<button id="resetTheme">Reset These</button>
+			<br /><br />
+			<div id="themeDiv" width="200" height="300"></div>
+			<div id="theme"></div><br /><br />
+			<a href="sessionStorage_page2.html">GO to page 2</a>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+
+	//sessionStorage的用法等同于localStorage的用法，都是getItem(),setItem(),removeItem(),clear();
+	var themeDiv = document.getElementById('themeDiv');
+
+
+	function initTheme(){
+		theme = document.getElementById('theme');
+
+		if(window.sessionStorage){
+			var btnResetTheme = document.getElementById('resetTheme');
+			btnResetTheme.addEventListener('click',resetTheme,false);
+
+			var selThemeColor = document.getElementById('themeColor');
+			selThemeColor.addEventListener('change',setTheme,false);
+
+			if(sessionStorage.themeColor){
+				var themeColor = sessionStorage.getItem('themeColor');
+				document.getElementById('themeColor').selected=true;
+
+				applyTheme(themeColor);
+			}
+		}else{
+			themeDiv.innerHTML= 'sessionStorage is not support';
+
+		}
+	}
+
+	function setTheme(){
+		var setThemeColor = document.getElementById('themeColor').value;
+
+		try{
+			sessionStorage.setItem('themeColor',themeColor);
+			applyTheme(themeColor);
+		}catch(err){
+			//err code 22 QUOTA_EXCEEDED_ERR say we ran out of space(会话溢出)
+			if(err.code == QUOTA_EXCEEDED_ERR){
+				themeDiv.innerHTML = 'sessionStorage ran out of memory';
+			}
+		}
+	}
+
+	function resetTheme(){
+		//删除sessionStorage里的数据
+		sessionStorage.removeItem('themeColor');
+		//reset display(重置显示)
+		document.getElementById('default').selected = true;
+		document.body.style.backgroundColor='';
+		themeDiv.innerHTML = 'Theme reset';
+	}
+
+	function applyTheme(ThemeColor){
+		document.body.style.backgroundColor=themeColor;
+		themeDiv.innerHTML = 'Theme' + themeColor +'applied';
+
+	}
+
+	window.addEventListener('load',initTheme,false);
+
+</script>
+</html>

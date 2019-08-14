@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>聊天</title>
+</head>
+<body>
+	<h1>基于nodejs的webSoket的简易聊天</h1>
+	<div id="app">
+		<input type="text" id="sendMsg">
+		<button id="submit">发送</button>
+	</div>
+
+	<script type="text/javascript">
+		function showMessage(str,type){
+			var div= document.createElement('div');
+			div.innerHTML = str;
+			if(type == "enter"){
+				div.style.color = "blue";
+			}else if(type == "leave"){
+				div.style.color = "red";
+			}
+
+			document.body.appendChild(div);
+		}
+
+		//新建一个websocket
+		var websocket = new WebSocket('ws://localhost:8181');
+		//打开websocket
+		websocket.onopen = function(){
+			console.log('服务器已连接......');
+			document.getElementById('submit').onclick = function(){
+				var txt = document.getElementById('sendMsg').value;
+				if(txt){
+					websocket.send(txt)
+				}
+			}
+
+		}
+
+		//关闭练级
+		websocket.onclose = function(){
+			console.log('服务器已关闭....')
+		}
+
+		//接受服务器返回的消息
+		websocket.onmessage = function(e){
+			var mes = JSON.parse(e.data);
+			showMessage(mes.data,mes.type)
+
+		}
+	</script>
+
+</body>
+</html>

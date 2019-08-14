@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>my form</title>
+</head>
+<style type="text/css">
+	* {
+		margin:0;
+		font:13px tahoma,verdana,sans-serif;
+		padding:0;
+	}
+	form {
+		padding-top:10px;
+		width:310px;
+	}
+	li {
+		clear:both;
+		list-style-type:none;
+		margin:0 0 10px;
+	}
+	label {
+		display:block;
+		float:left;
+		margin:0 10px 0 0;
+		padding:5px;
+		text-align:right;
+		width:100px;
+	}
+	input {
+		background-image:url();
+		box-shadow:0px 0px 5px #f0bb18;
+		border:2px solid #b01212;
+	}
+	input:invalid:required {
+		box-shadow:0px 0px 5px #f01212;
+		border:2px solid #f0bb18;
+	}
+	input:focuss:invalid {
+		box-shadow:0px 0px 5px #b01212;
+		border:2px solid #b01212;
+	}
+	input:invalid {
+		border:2px solid #7ab526;
+	}
+	input[type=submit] {
+		background:#7ab526;
+		border:none;
+		border-radius:5px;
+		box-shadow:0px 0px 5px #7ab526;
+		color:#fff;
+		cursor:pointer;
+		float:right;
+		font-weight: bold;
+		padding-left: 5px;
+		width:auto;
+		height:30px;
+	}
+	.moddlelist {
+		margin:30px 0px 0px 20px;
+		
+	}
+
+	
+</style>
+<body>
+	<h1>signed up your name</h1>
+	<form>
+		<fieldset class="moddlelist">
+			<legend>Person info</legend>
+			<ol>
+			<li><label for="tel">Tel:</label><input type="tel" name="tel" id="tel" required></li>
+			<li><label for="website">Website:</label><input required type="url" name="URL" id="website"></li>
+			<li><label for="email">Email:</label><input required type="email" name="e-mail" id="email"></li>
+			<li><input type="submit" name="sub" id="sub" value="Send your message"></li>
+		</ol>
+		</fieldset>
+		
+	</form>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>商家商品展示区</title>
+	<style type="text/css">
+		body {
+			margin:0px;
+			overflow: hidden;
+		}
+		
+	</style>
+	<script src="../js/three_93.js"></script>
+	<script src="../js/OrbitControls.js"></script>
+	<script src="../js/loaders/OBJLoader.js"></script>
+</head>
+<body>
+	<script>
+		 /**
+     * 创建场景对象Scene
+     */	
+			var scene = new THREE.Scene();
+
+			//OBJ文件加载,只加载obj文件中的几何信息，不加载材质文件.mtl
+			var loader = new THREE.OBJLoader();
+			// var loader =new THREE.ObjectLoader();
+			loader.load('../models/model.obj',function(obj){
+			// loader.load('model.json',function(obj){})
+
+				//控制台查看返回结构：包含一个网格模型Mesh的组Group
+				console.log('obj');
+				//加载纹理
+				var texture = new THREE.TextureLoader().load('textures/texture1.png');
+				// 基础Basic网格材质，不受光照影响   Phong网格材质受光照影响
+				obj.children[0].material = new THREE.MeshBasicMaterial({
+			//obj.children[0].material= new THREE.MeshPhongMaterial({
+					map:texture
+				});
+				scene.add(obj);
+				obj.children[0].scale.set(5,5,5);
+			})
+			//点光源
+			var point = new THREE.PointLight(0xffffff);
+			point.position.set(400,200,300);
+			scene.add(point);
+			//环境光
+			var ambient = new THREE.AmbientLight(0xffffff,0.3);
+			scene.add(ambient);
+			//相机
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			var k = width/height;
+			var s = 150;
+			var camera = new THREE.OrthographicCamera(-s*k,s*k,s,-s,1,1000);
+			camera.position.set(200,300,200);
+			camera.lookAt(scene.position);
+
+			//渲染对象
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(width,height);
+			renderer.setClearColor(0xb9d3ff,1);
+			document.body.appendChild(renderer.domElement);
+
+			//渲染函数
+			function render(){
+				renderer.render(scene,camera);
+				requestAnimationFrame(render)
+			}
+			render();
+
+			var controls = new THREE.OrbitControls(camera);
+
+			controls.addEventListener('change',render);
+
+
+
+	</script>
+
+</body>
+</html>

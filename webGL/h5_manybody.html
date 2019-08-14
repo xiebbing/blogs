@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<script src="../js/three_93.js"></script>
+	<style type="text/css">
+		div#canvas-frame {
+			border:none;
+			cursor: pointer;
+			width:100%;
+			height:600px;
+			background-color: #EEEEEE;
+		}
+
+	</style>
+	<title></title>
+</head>
+<script>
+	//渲染器
+	var renderer;
+	function initThree(){
+		width = document.getElementById('canvas-frame').clientWidth;
+		height = document.getElementById('canvas-frame').clientHeight;
+		renderer = new THREE.WebGLRenderer({
+			antialias:true
+		});
+
+		renderer.setSize(width,height);
+		document.getElementById('canvas-frame').appendChild(renderer.domElement);
+		renderer.setClearColor(0xFFFFFF,1.0);
+	}
+
+	//相机
+	var camera;
+	function initCamera(){
+		camera = new THREE.PerspectiveCamera(45,width/height,1,10000);
+		camera.position.x = 600;
+		camera.position.y = 0;
+		camera.position.z = 600;
+		camera.up.x = 0;
+		camera.up.y = 1;
+		camera.up.z = 0;
+		camera.lookAt(0,0,0);
+	}
+
+	//场景
+	var scene;
+	function initScene(){
+		scene = new THREE.Scene()
+	}
+	//光源
+	var light;
+	function initLight(){
+		//环境光
+		// light = new THREE.AmbientLight(0x00FF00);
+		// light.position.set(100,100,200);
+		// scene.add(light);
+
+		//点光源
+		// light = new THREE.PointLight(0xFF0000);
+		// light.position.set(30,0,25);
+		// scene.add(light);
+
+		//平行光
+		// light = new THREE.DirectionalLight(0xFF0000);
+		// light.position.set(0, 0,1);
+		// scene.add(light);
+
+		//聚光灯
+		light = new THREE.SpotLight(0xFF0000);
+		light.position.set(-1000,1000,1000);
+		scene.add(light);
+
+		
+	}
+	//视镜体
+	var cube;
+	function initObject(){
+		var geometry = new THREE.CubeGeometry(200, 100, 50,4,4);
+		var material = new THREE.MeshLambertMaterial({color:0xFFFFFF});
+		var mesh = new THREE.Mesh(geometry,material);
+		mesh.position.set(0,0,0);
+		scene.add(mesh);
+
+		var geometry2 = new THREE.CubeGeometry(200, 100, 50,4,4);
+		var material2 = new THREE.MeshLambertMaterial( {color:0xFFFFFF} );
+		var mesh2 = new THREE.Mesh(geometry2,material2);
+		mesh2.position.set(-300,0,0)
+		scene.add(mesh2);
+
+		var mesh3 = new THREE.Mesh(geometry2,material2);
+		mesh3.position.set(0,-150,0)
+		scene.add(mesh3);
+
+		var mesh4 = new THREE.Mesh(geometry2,material2);
+		mesh4.position.set(0,150,0)
+		scene.add(mesh4);
+
+		var mesh5 = new THREE.Mesh(geometry2,material2);
+		mesh5.position.set(300,0,0)
+		scene.add(mesh5);
+
+		var mesh6 = new THREE.Mesh(geometry2,material2);
+		mesh6.position.set(0,0,-100);
+		scene.add(mesh6)
+	}
+	//触发函数
+	function threeStart(){
+		initThree();
+		initCamera();
+		initScene();
+		initLight();
+		initObject();
+		renderer.clear();
+		renderer.render(scene,camera);
+
+	}
+
+</script>
+<body onload="threeStart();">
+	<div id="canvas-frame"></div>
+
+</body>
+</html>

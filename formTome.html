@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>my form</title>
+</head>
+<body>
+	<form>
+		<label for="email">
+			Email
+		</label>
+		<input type="email" name="email" id="email" oninput="check()" autofocus="false">
+		<input type="submit" name="btn">
+	</form>
+	<script type="text/javascript">
+		function check(){
+			var emailInput = document.getElementById('email');
+			emailInput.setCustomValidity("this is not vaild.please fix to it");
+		}
+	</script>
+
+</body>
+</html>

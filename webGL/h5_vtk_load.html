@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style type="text/css">
+	body {
+		font-family: monospace;
+		background-color: #000;
+		color:#fff;
+		margin:0px;
+		overflow: hidden;
+	}
+
+
+</style>
+	<title>载入vtk模型</title>
+
+</head>
+<body>
+	<div id="info">
+	</div>
+	<script src="../js/libs/inflate.min.js"></script>
+	<script src="../js/three_93.js"></script>
+	<script src="../js/controls/TrackballControls.js"></script>
+	<script src="../js/loaders/VTKLoader.js"></script>
+	<script src="../js/WebGL.js"></script>
+	<script src="../js/libs/stats.min.js"></script>
+
+	<script>
+		if(WEBGL.isWebGLAvailable() === false){
+			document.body.appendChild(WEBGL.getWebGLErrorMessage() );
+		}
+
+		var container,stats;
+		var camera,scene,renderer,controls;
+		var cross;
+
+		init();
+		animate();
+
+		function init(){
+			camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight,0.01,1e10);
+
+			camera.position.z = 0.2;
+
+			controls = new THREE.TrackballControls(camera);//轨道控制
+
+			controls.rotateSpeed = 5.0;//速度
+			controls.zoomSpeed = 5;//变焦速度
+			controls.panSpeed = 2;//平移速度
+
+			controls.noZoom = false;//no缩放
+			controls.noPan = false;//no 平移
+
+			controls.staticMoving = false;//静态移动
+			controls.dynamicDampingFactor = 0.3;//动态阻尼系数
+
+			scene = new THREE.Scene();//场景
+
+			scene.add(camera);
+
+			//light
+			var dirLight = new THREE.DirectionalLight()//平行光
+			dirLight.position.set(200,200,1000).normalize()//序列化
+
+			camera.add(dirLight);
+			camera.add(dirLight.target);
+
+			//material
+			var material = new THREE.MeshLambertMaterial({
+				color:0xff0000,
+				side:THREE.DoubleSide
+			});
+
+			var loader = new THREE.VTKLoader();
+
+			loader.load("../models/liver.vtk",function(geometry){
+				geometry.center();//基于外边界矩形将几何体居中。
+				geometry.computeVertexNormals();//通过周围面的法向量计算顶点的法向量
+
+
+				var mesh = new THREE.Mesh(geometry,material);
+				mesh.position.set(-0.075,0.005,0);
+				mesh.scale.multiplyScalar(0.5);
+				scene.add(mesh);
+
+			});
+			//renderer
+			renderer = new THREE.WebGLRenderer({
+				antialias:false
+			});
+
+			renderer.setClearColor(0x000000,1.0);
+			renderer.setSize(window.innerWidth,window.innerHeight);
+
+			container = document.createElement('div');
+			document.body.appendChild(container);
+			container.appendChild(renderer.domElement);
+
+			stats = new Stats();
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			container.appendChild(stats.domElement);
+
+			//
+			window.addEventListener('resize',onWindowResize,false);
+		}
+
+		function onWindowResize(){
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(window.innerWidth,window.innerHeight);
+
+			controls.handleResize();
+		}
+
+		function animate(){
+			requestAnimationFrame(animate);
+
+			controls.update();
+			renderer.render(scene,camera);
+
+			stats.update();
+		}
+
+
+
+
+
+	</script>
+
+
+</body>
+</html>
